@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大阪・京都 2026 旅遊完整攻略</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans TC', sans-serif; background: #f5f4f0; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
+
+  /* NAV TABS */
+  .nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #e0ddd5; display: flex; overflow-x: auto; }
+  .nav button { flex: none; padding: 12px 18px; border: none; background: none; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .nav button.active { color: #1a1a1a; border-bottom-color: #534AB7; font-weight: 500; }
+  .nav button:hover { background: #f5f4f0; }
+
+  /* SECTIONS */
+  .section { display: none; padding: 16px; max-width: 720px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* HEADER CARD */
+  .header-card { background: #534AB7; color: #fff; border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+  .header-card h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .header-card p { font-size: 13px; opacity: 0.85; }
+  .meta-row { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+  .meta-pill { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 12px; }
+
+  /* DAY CARDS */
+  .day-card { background: #fff; border-radius: 12px; border: 0.5px solid #e0ddd5; margin-bottom: 10px; overflow: hidden; }
+  .day-hdr { padding: 12px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .day-hdr:hover { background: #fafaf8; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex: none; }
+  .bk { background: #EEEDFE; color: #3C3489; }
+  .bo { background: #E6F1FB; color: #0C447C; }
+  .bt { background: #EAF3DE; color: #3B6D11; }
+  .day-ttl { font-size: 14px; font-weight: 500; flex: 1; }
+  .day-date { font-size: 12px; color: #888; }
+  .chv { font-size: 11px; color: #aaa; transition: transform 0.2s; flex: none; }
+  .chv.open { transform: rotate(180deg); }
+  .day-body { padding: 0 16px 14px; display: none; }
+  .day-body.open { display: block; }
+
+  /* TIMELINE SLOTS */
+  .slot { display: grid; grid-template-columns: 64px 1fr; margin: 8px 0; }
+  .slot-time { font-size: 11px; font-weight: 600; color: #888; padding-top: 2px; }
+  .slot-content { border-left: 2px solid #e0ddd5; padding: 0 0 10px 12px; }
+  .slot-title { font-size: 13px; font-weight: 500; }
+  .slot-desc { font-size: 12px; color: #666; margin-top: 3px; line-height: 1.5; }
+  .stag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 5px; }
+  .stag-hot { background: #FAECE7; color: #993C1D; }
+  .stag-food { background: #EAF3DE; color: #3B6D11; }
+  .stag-night { background: #EEEDFE; color: #3C3489; }
+  .stag-def { background: #f0eeea; color: #666; }
+  .tip { border-left: 3px solid #7F77DD; padding: 7px 12px; margin-top: 10px; background: #EEEDFE; border-radius: 0 8px 8px 0; font-size: 12px; color: #3C3489; }
+  .rest-box { background: #f5f4f0; border-radius: 8px; padding: 10px 14px; margin-top: 10px; }
+  .rest-box .rt { font-size: 12px; font-weight: 500; margin-bottom: 5px; }
+  .rest-box .rd { font-size: 12px; color: #555; margin-top: 3px; }
+
+  /* TRANSPORT TABLE */
+  .sec-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: #888; text-transform: uppercase; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 0.5px solid #e0ddd5; }
+  .t-table { width: 100%; border-collapse: collapse; }
+  .t-table th { font-size: 11px; color: #999; font-weight: 500; text-align: left; padding: 4px 6px; }
+  .t-table th:not(:first-child) { text-align: right; }
+  .t-table td { padding: 8px 6px; border-bottom: 0.5px solid #f0eeea; vertical-align: middle; font-size: 12px; }
+  .t-table tr:last-child td { border-bottom: none; }
+  .t-table td:not(:first-child) { text-align: right; color: #444; }
+  .t-table td:first-child { color: #1a1a1a; }
+  .t-from-to { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .t-arrow { color: #ccc; font-size: 10px; }
+  .ttag { display: inline-block; font-size: 10px; padding: 1px 5px; border-radius: 6px; margin-left: 4px; }
+  .ttag-walk { background: #EAF3DE; color: #3B6D11; }
+  .ttag-train { background: #E6F1FB; color: #0C447C; }
+  .ttag-bus { background: #FAEEDA; color: #633806; }
+  .t-total { display: flex; justify-content: space-between; padding: 8px 6px; border-top: 1px solid #e0ddd5; margin-top: 4px; font-size: 12px; }
+  .t-total span:first-child { color: #888; }
+  .t-total span:last-child { font-weight: 500; }
+  .tip-box { border-left: 3px solid #7F77DD; padding: 8px 12px; margin: 12px 0; background: #EEEDFE; border-radius: 0 8px 8px 0; font-size: 12px; color: #3C3489; line-height: 1.6; }
+
+  /* HOTEL / RESTAURANT CARDS */
+  .card-grid { display: grid; gap: 10px; }
+  .info-card { background: #fff; border-radius: 12px; border: 0.5px solid #e0ddd5; padding: 14px 16px; }
+  .card-rank { display: inline-block; background: #534AB7; color: #fff; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 8px; margin-bottom: 8px; }
+  .card-rank.r2 { background: #5DCAA5; }
+  .card-rank.r3 { background: #D85A30; }
+  .card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: #888; margin-bottom: 8px; }
+  .card-body { font-size: 12px; color: #444; line-height: 1.6; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .ctag { font-size: 11px; padding: 2px 8px; border-radius: 8px; background: #f0eeea; color: #555; }
+  .ctag-green { background: #EAF3DE; color: #3B6D11; }
+  .ctag-blue { background: #E6F1FB; color: #0C447C; }
+  .ctag-purple { background: #EEEDFE; color: #3C3489; }
+  .ctag-amber { background: #FAEEDA; color: #633806; }
+  .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #f0eeea; }
+  .price-label { font-size: 11px; color: #888; }
+  .price-val { font-size: 13px; font-weight: 600; color: #534AB7; }
+  .divider { height: 1px; background: #f0eeea; margin: 16px 0; }
+  .sub-section-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #534AB7; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <button class="active" onclick="showTab('itinerary', this)">📅 行程</button>
+  <button onclick="showTab('transport', this)">🚃 交通</button>
+  <button onclick="showTab('hotels', this)">🏨 住宿</button>
+  <button onclick="showTab('food', this)">🍜 餐廳</button>
+</nav>
+
+<!-- ========== TAB 1: 行程 ========== -->
+<div id="itinerary" class="section active">
+  <div class="header-card">
+    <h1>大阪・京都 2026 行程攻略</h1>
+    <p>6人團 ✈ IT210 / IT211</p>
+    <div class="meta-row">
+      <span class="meta-pill">8/27（四）出發</span>
+      <span class="meta-pill">9/1（二）回台</span>
+      <span class="meta-pill">京都 1.5天</span>
+      <span class="meta-pill">大阪 3.5天</span>
+    </div>
+  </div>
+  <div id="itinerary-days"></div>
+</div>
+
+<!-- ========== TAB 2: 交通 ========== -->
+<div id="transport" class="section">
+  <div class="header-card">
+    <h1>交通資訊總覽</h1>
+    <p>各段移動距離、交通方式與預估時間</p>
+  </div>
+
+  <div class="sec-label">✈️ Day 1 — 機場抵達 → 京都</div>
+  <table class="t-table">
+    <tr><th>路線</th><th>距離</th><th>方式</th><th>時間</th></tr>
+  </table>
+  <div id="t0"></div>
+
+  <div class="sec-label">⛩️ Day 2 — 京都東山路線（伏見→祇園→清水寺）</div>
+  <table class="t-table">
+    <tr><th>路線</th><th>距離</th><th>方式</th><th>時間</th></tr>
+  </table>
+  <div id="t1"></div>
+  <div class="t-total"><span>東山步行累計</span><span>約 3.5 km</span></div>
+
+  <div class="sec-label">🌿 Day 3 — 嵐山上午</div>
+  <table class="t-table">
+    <tr><th>路線</th><th>距離</th><th>方式</th><th>時間</th></tr>
+  </table>
+  <div id="t2"></div>
+  <div class="t-total"><span>嵐山區步行累計</span><span>約 2–3 km</span></div>
+
+  <div class="sec-label">🚃 Day 3 — 京都移動大阪</div>
+  <table class="t-table">
+    <tr><th>路線</th><th>距離</th><th>方式</th><th>時間</th></tr>
+  </table>
+  <div id="t3"></div>
+
+  <div class="sec-label">🛍️ Day 4–5 — 大阪市區</div>
+  <table class="t-table">
+    <tr><th>路線</th><th>距離</th><th>方式</th><th>時間</th></tr>
+  </table>
+  <div id="t4"></div>
+
+  <div class="sec-label">✈️ Day 6 — 難波 → 關西機場</div>
+  <table class="t-table">
+    <tr><th>路線</th><th>距離</th><th>方式</th><th>時間</th></tr>
+  </table>
+  <div id="t5"></div>
+
+  <div class="tip-box">
+    <strong>💡 重要提醒</strong><br>
+    <strong>Day 3 週六嵐山→金閣寺：</strong>巴士11號週六停駛，建議搭計程車（約 ¥1,500–2,000），6人分攤很划算。<br><br>
+    <strong>大阪市區：</strong>難波、心齋橋、道頓堀、黑門市場彼此步行距離都在1km內，完全不需要搭車。<br><br>
+    <strong>回程：</strong>班機 15:10，南海 Rapi:t 34分到機場，<strong>最晚 11:45 從難波出發</strong>，上午掃貨 11:30 前結束。
+  </div>
+</div>
+
+<!-- ========== TAB 3: 住宿 ========== -->
+<div id="hotels" class="section">
+  <div class="header-card">
+    <h1>住宿推薦</h1>
+    <p>各城市前3名，中等價位 × 交通方便 × 6人適用</p>
+  </div>
+
+  <div class="sub-section-title">🏯 京都住宿（2晚，8/27–8/29）</div>
+  <p style="font-size:12px;color:#888;margin-bottom:12px">推薦住四條河原町一帶：鄰近錦市場、祇園、阪急電鐵直達大阪/嵐山，景點步行即達。</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <span class="card-rank">NO.1 最推薦</span>
+      <div class="card-name">相鐵 FRESA INN 京都四條烏丸</div>
+      <div class="card-sub">地鐵四條站 4號出口 → 步行1分鐘</div>
+      <div class="card-body">
+        連鎖品牌品質穩定，CP值超高。地鐵四條站轉個彎就到，旁邊有7-11。房間新又寬敞（相對日本標準），美國銷售冠軍舒達床墊，備品齊全，有投幣洗衣機。多次回住率極高，網友瘋推。搭阪急電鐵去大阪或嵐山都很快。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">地鐵站1分鐘</span>
+        <span class="ctag ctag-blue">洗衣機</span>
+        <span class="ctag ctag-purple">高CP值</span>
+        <span class="ctag">6人可訂多間</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">參考房價（雙人房/晚）</span>
+        <span class="price-val">TWD 2,500–3,500</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r2">NO.2</span>
+      <div class="card-name">京都四條河原町 FORZA 飯店</div>
+      <div class="card-sub">阪急河原町站 → 步行4分鐘 ｜ 2021年開幕</div>
+      <div class="card-body">
+        新飯店、高評價，位於京都最繁華熱鬧區域。步行到錦市場約2分鐘，地鐵四條站7分鐘。有直通地鐵通道，24小時免費咖啡，有自助洗衣烘衣機，步行即到祇園、鴨川。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-blue">2021新開幕</span>
+        <span class="ctag ctag-green">錦市場2分鐘</span>
+        <span class="ctag ctag-purple">免費咖啡</span>
+        <span class="ctag">評價9.3</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">參考房價（雙人房/晚）</span>
+        <span class="price-val">TWD 3,000–4,200</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r3">NO.3</span>
+      <div class="card-name">THE GENERAL KYOTO 四條新町</div>
+      <div class="card-sub">四條站 → 步行6–8分鐘 ｜ 2023年開幕</div>
+      <div class="card-body">
+        2023年新開幕，設計感強，2站到京都車站，搭阪急去大阪/嵐山非常快。周邊有錦市場、河原町、寺町京極商店街。2樓休息室從中午到晚上9點提供免費甜點和酒精飲料，24小時免費咖啡。服務人員態度超好，會幫訂餐廳。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-blue">2023新開幕</span>
+        <span class="ctag ctag-green">免費點心＆酒</span>
+        <span class="ctag ctag-purple">設計感佳</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">參考房價（雙人房/晚）</span>
+        <span class="price-val">TWD 3,000–4,500</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sub-section-title">🏙️ 大阪住宿（3晚，8/29–9/1）</div>
+  <p style="font-size:12px;color:#888;margin-bottom:12px">推薦住難波：南海電鐵34分直達機場，道頓堀/黑門市場/心齋橋步行可達，是大阪最方便的住宿區。</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <span class="card-rank">NO.1 最推薦</span>
+      <div class="card-name">相鐵 FRESA INN 大阪難波站前</div>
+      <div class="card-sub">難波站 E9出口 → 步行3分鐘</div>
+      <div class="card-body">
+        PTT、Dcard 超多人推薦的難波住宿定番。道頓堀、黑門市場走路5分鐘，心齋橋商店街10分鐘。南海電鐵難波站步行5分鐘，直達關西機場最方便。有洗衣烘乾機，附近7-11、大國藥妝，生活機能滿分。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">道頓堀5分鐘</span>
+        <span class="ctag ctag-blue">近機場交通</span>
+        <span class="ctag ctag-purple">超高回住率</span>
+        <span class="ctag">洗衣機</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">參考房價（雙人房/晚）</span>
+        <span class="price-val">TWD 2,300–3,500</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r2">NO.2</span>
+      <div class="card-name">大阪難波日和飯店</div>
+      <div class="card-sub">南海難波站南口 → 步行3分鐘</div>
+      <div class="card-body">
+        交通條件最優，步行3分鐘搭南海電鐵直達關西機場最方便。評價9.4分、位置得分9.6，周邊有高島屋百貨、心齋橋商店街。設計現代時尚，屋頂露台可觀夜景，提供大阪典型小吃與飲料的 NAMbar。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">評價9.4分</span>
+        <span class="ctag ctag-blue">機場3分鐘</span>
+        <span class="ctag ctag-amber">屋頂露台</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">參考房價（雙人房/晚）</span>
+        <span class="price-val">TWD 3,000–4,500</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r3">NO.3</span>
+      <div class="card-name">唐草飯店 大阪難波</div>
+      <div class="card-sub">地鐵難波站 → 步行4分鐘</div>
+      <div class="card-body">
+        轉個彎就是道頓堀最熱鬧地段，走路1分鐘就有全家超商。大廳櫃台會說中文，免費寄放行李，下午開始有免費飲料點心。早餐超厲害，有現做章魚燒、生魚片、蔬菜水果，平價卻吃得像在地人。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">中文服務</span>
+        <span class="ctag ctag-purple">免費飲料點心</span>
+        <span class="ctag ctag-amber">特色早餐</span>
+        <span class="ctag">平價首選</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">參考房價（雙人房/晚）</span>
+        <span class="price-val">TWD 1,800–2,800</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:16px">
+    💡 <strong>6人訂房建議：</strong>以上飯店建議訂 2–3 間雙人/三人房。若想整組住一起，也可以找 <strong>MIMARU 系列公寓式飯店</strong>（京都/大阪都有），有廚房、客廳、洗烘衣機，最適合多人家庭或朋友團。房價約 TWD 5,000–8,000 整間起。
+  </div>
+</div>
+
+<!-- ========== TAB 4: 餐廳 ========== -->
+<div id="food" class="section">
+  <div class="header-card">
+    <h1>餐廳推薦</h1>
+    <p>平價優先 × CP值高 × 在地體驗</p>
+  </div>
+
+  <div class="sub-section-title">🏯 京都餐廳推薦</div>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <span class="card-rank">必吃 No.1</span>
+      <div class="card-name">本家 第一旭 本店</div>
+      <div class="card-sub">京都車站附近 ｜ 拉麵 ｜ 1947年創業老店</div>
+      <div class="card-body">
+        下飛機後或第一天抵達的完美選擇。京風豚骨醬油湯頭，用伏見生醬油與母豬骨熬製，清甜不死鹹。招牌「特製拉麵」鋪滿叉燒肉，加上大把京都九條蔥，Tabelog評分爆高。排隊是常態但翻桌快。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">Tabelog高分</span>
+        <span class="ctag ctag-blue">京都車站近</span>
+        <span class="ctag">1947老店</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥800–1,200</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r2">必吃 No.2</span>
+      <div class="card-name">祇園 下河原 ひさご</div>
+      <div class="card-sub">祇園四條附近 ｜ 親子丼 ｜ 80年老店</div>
+      <div class="card-body">
+        傳承80年的名店，選用丹波放山雞與頂級雞蛋製作親子丼，撒上山椒粉層次豐富。位置就在祇園花見小路附近，逛完祇園直接走過去，是很多在地人和旅遊達人都推薦的高CP值午餐。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">高CP值</span>
+        <span class="ctag ctag-blue">祇園步行可達</span>
+        <span class="ctag">80年老店</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥1,000–1,500</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r3">必吃 No.3</span>
+      <div class="card-name">燒肉弘（京の焼肉処 弘）</div>
+      <div class="card-sub">京都車站前 / 四條木屋町 ｜ 和牛燒肉</div>
+      <div class="card-body">
+        直接買入整頭牛自家處理，讓顧客能用合理價格吃到稀有部位，是肉食愛好者必訪聖地。平均消費 ¥4,000–6,000，但CP值極高。必點和牛拼盤，入口即化。熱門時段必須提前預約，Google評分4.3。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-amber">和牛CP值超高</span>
+        <span class="ctag ctag-blue">需提前預約</span>
+        <span class="ctag">稀有部位</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥4,000–6,000</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="sub-section-title">🛍️ 大阪餐廳推薦（平價高CP）</div>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <span class="card-rank">必吃 No.1</span>
+      <div class="card-name">甲賀流 章魚燒（道頓堀本店）</div>
+      <div class="card-sub">道頓堀 ｜ 章魚燒 ｜ 大阪靈魂小吃</div>
+      <div class="card-body">
+        大阪最代表性的章魚燒之一，外微酥內爆漿，包裹超大塊Q彈章魚腳，搭配美乃滋超銷魂。道頓堀就在眼前，吃完繼續逛，無縫接軌。另外「あっちち本舗」也很推，兩家都可以試。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-green">邊走邊吃</span>
+        <span class="ctag ctag-blue">道頓堀地標</span>
+        <span class="ctag">必吃小吃</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥500–800</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r2">必吃 No.2</span>
+      <div class="card-name">串炸達摩（新世界元祖串炸）</div>
+      <div class="card-sub">道頓堀 / 新世界 ｜ 串炸 ｜ 近百年歷史</div>
+      <div class="card-body">
+        大阪串炸沒吃過等於白來！近百年的美味傳承，各類炸物任選，搭配酸甜秘傳醬汁涮嘴。心齋橋店有自動軌道車送餐非常有趣，多國語言菜單，6人一起圍坐吃串炸超歡樂。二沾醬汁規矩（dip醬只能沾一次）是文化體驗的一部分。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-amber">在地體驗</span>
+        <span class="ctag ctag-blue">道頓堀/心齋橋都有</span>
+        <span class="ctag">百年老店</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥1,500–2,500</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r3">必吃 No.3</span>
+      <div class="card-name">燒肉力丸（道頓堀店）</div>
+      <div class="card-sub">道頓堀 ｜ 燒肉吃到飽 ｜ 炭火燒烤</div>
+      <div class="card-body">
+        心齋橋/道頓堀一帶有7家分店，超人氣吃到飽首選。炭火烤肉香氣逼人，店家親自手切厚片，油花均勻口感柔軟多汁。90分鐘或120分鐘方案，¥2,980起。6人一起吃到飽兼具歡樂感和CP值，比單點划算很多。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-amber">炭火吃到飽</span>
+        <span class="ctag ctag-green">6人超適合</span>
+        <span class="ctag ctag-blue">可線上預約</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥2,980–3,780 吃到飽</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="sub-section-title">⭐ 大阪特選晚餐（精緻體驗）</div>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <span class="card-rank">蟹料理首選</span>
+      <div class="card-name">蟹道樂 道頓堀本店</div>
+      <div class="card-sub">道頓堀 ｜ 螃蟹全席 ｜ 63年老字號</div>
+      <div class="card-body">
+        道頓堀最標誌性的大螃蟹招牌，就是蟹道樂的代名詞。63年老字號，松葉蟹、鱈場蟹頂級食材，螃蟹全席套餐從生魚片、天婦羅、火鍋一路吃，非常豐盛。套餐從 ¥7,920 起，6人一起圍爐吃蟹，儀式感十足。<strong>必須提前預約！</strong>
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-amber">必提前預約</span>
+        <span class="ctag ctag-blue">道頓堀地標</span>
+        <span class="ctag">63年老店</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥7,920–16,500</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r2">帝王蟹首選</span>
+      <div class="card-name">FUJIYAMA TOKYO 大阪難波店</div>
+      <div class="card-sub">難波四橋站 1分鐘 ｜ 帝王蟹+壽司吃到飽</div>
+      <div class="card-body">
+        帝王蟹、松葉蟹腳＋70種高級壽司吃到飽，2小時方案。從鮪魚大腹、海膽、鮭魚卵到滿溢手卷，每貫由師傅現場製作。店內可提供英語服務，價格透明。6人一起吃超划算，¥9,898/人含松葉蟹套餐。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-amber">帝王蟹吃到飽</span>
+        <span class="ctag ctag-blue">難波1分鐘</span>
+        <span class="ctag ctag-green">英文服務</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥6,599–9,898 吃到飽</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="card-rank r3">和牛首選</span>
+      <div class="card-name">板前燒肉一斗 東心齋橋店</div>
+      <div class="card-sub">心齋橋站5分鐘 ｜ A5黑毛和牛單點</div>
+      <div class="card-body">
+        老闆走訪全日本挑選最頂級黑毛和牛，坐在吧檯可以看到主廚親自現場刨切每塊肉片再上桌，儀式感超強。昭和風的輕鬆氛圍，大口吃肉邊喝酒，A5牛排從 ¥2,398/人份起，比吃到飽更精緻，適合想體驗頂級和牛的人。
+      </div>
+      <div class="card-tags">
+        <span class="ctag ctag-amber">A5和牛主廚現刨</span>
+        <span class="ctag ctag-blue">昭和風氛圍</span>
+        <span class="ctag">需預約</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">人均消費</span>
+        <span class="price-val">¥5,000–8,000</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:16px">
+    💡 <strong>訂位提醒：</strong>蟹道樂、板前燒肉一斗、燒肉弘等熱門餐廳，<strong>6人團建議至少1個月前預約</strong>，尤其暑假旺季（8月底）位子很搶手。可以透過 TableCheck、食べログ或官網預約，部分可選擇中文介面。
+  </div>
+</div>
+
+<script>
+// ========== ITINERARY DATA ==========
+const days = [
+  {
+    date:"8/27（四）", title:"抵達 → 京都夜遊", badge:"bk", bl:"京都",
+    slots:[
+      {t:"06:40", h:"IT210 桃園出發", d:"關西機場約 10:25 抵達。搭 JR HARUKA 特急，80分直達京都車站。", tags:["推薦"]},
+      {t:"12:30", h:"抵達京都 · 飯店入住", d:"放行李、稍作休息。京都車站或四條河原町周邊住宿。"},
+      {t:"14:00", h:"錦市場閒逛", d:"「京都的廚房」，嘗試玉子燒、豆乳冰淇淋、各式串燒小吃。", tags:["輕鬆"]},
+      {t:"18:00", h:"晚餐 · 鴨川納涼床", d:"8月底正是納涼床季節！鴨川河畔餐廳露天高台，一邊吹河風一邊吃晚餐，夏季京都獨有體驗。建議提前預約。", tags:["夏季限定","必體驗"]},
+      {t:"20:00", h:"夜遊 · 祇園 + 先斗町", d:"飯後步行至祇園花見小路，燈籠與石板路的古都夜色。先斗町入夜後茶屋幽黃燈光最有氛圍，運氣好能見到藝妓。", tags:["夜間景點"]}
+    ],
+    tip:"💡 鴨川納涼床一定要提前預約！這天行程輕鬆，讓大家適應時差、感受京都夜晚氣氛。"
+  },
+  {
+    date:"8/28（五）", title:"京都全天 · 東山路線", badge:"bk", bl:"京都",
+    slots:[
+      {t:"早上", h:"伏見稻荷大社 · 千本鳥居", d:"建議 8:30 前抵達，人少光線美。JR稻荷站下車直接到。爬到四辻展望台約1小時。", tags:["必去","早去避人潮"]},
+      {t:"午餐", h:"清水坂周邊吃飯", d:"搭京阪電車至清水五条站。推薦湯豆腐、京都懷石定食、或抹茶甜點（茶寮都路里）。"},
+      {t:"下午", h:"清水寺 + 二年坂 + 三年坂", d:"清水寺下午光線角度佳。逛完沿二三年坂買伴手禮，走到八坂神社和祇園白川。", tags:["必去"]},
+      {t:"晚餐", h:"祇園周邊 · 燒肉弘或居酒屋", d:"推薦燒肉弘（四條木屋町）A5和牛CP值超高，或祇園四條一帶的居酒屋，感受京都夜間街景。"},
+      {t:"晚上", h:"京都塔夜景（自由選擇）", d:"票價約 ¥900，360度京都夜景。或免費逛車站大階梯LED燈光秀（4F~11F）。", tags:["夜間景點"]}
+    ],
+    tip:"📍 路線：伏見（南）→ 清水寺（東山）→ 祇園，搭京阪電車串連，不用走遠。"
+  },
+  {
+    date:"8/29（六）", title:"嵐山上午 → 下午移動大阪", badge:"bt", bl:"移動日",
+    slots:[
+      {t:"早上", h:"嵐山 · 竹林 + 渡月橋", d:"⚠️ 週六人多，務必 8:00 前抵達！搭JR嵯峨嵐山站。渡月橋散步、竹林拍照、天龍寺（可選）。", tags:["必去","早去！"]},
+      {t:"10:30", h:"（可選）金閣寺", d:"從嵐山搭計程車約20分（週六巴士停駛），約¥1,500–2,000，6人分攤很划算。"},
+      {t:"午餐", h:"嵐山附近 · 吃完再移動", d:"渡月橋附近有各種食堂與甜點，吃飽後整理行李準備移動到大阪。"},
+      {t:"14:00", h:"京都 → 大阪 移動", d:"搭阪急電鐵（河原町→梅田，約40分）。大阪飯店入住，建議選難波或心齋橋。", tags:["交通"]},
+      {t:"晚上", h:"道頓堀初體驗 · 掃街吃小吃", d:"章魚燒（甲賀流、あっちち本舗）、大阪燒（千房）、串炸（達摩）。感受大阪夜晚的熱鬧！", tags:["必吃"]}
+    ],
+    tip:"🧳 嵐山行程控制在上午，下午輕鬆移動到大阪，晚上去道頓堀熱身！"
+  },
+  {
+    date:"8/30（日）", title:"大阪 · 逛街 + 體驗生活", badge:"bo", bl:"大阪",
+    slots:[
+      {t:"上午", h:"黑門市場 + 周邊閒逛", d:"大阪廚房！海鮮丼、烤扇貝、和牛串、草莓大福…各攤邊走邊吃，最道地的在地早午餐體驗。", tags:["在地體驗"]},
+      {t:"下午", h:"心齋橋 + 美國村 + 藥妝掃貨", d:"心齋橋商店街直走就是道頓堀，轉彎是美國村（潮牌/二手服飾）。松本清、大國藥妝、唐吉軻德沿路都有。", tags:["購物"]},
+      {t:"傍晚", h:"大阪城公園散步（可選）", d:"搭地鐵去大阪城公園走走，外圍免費，天守閣入場 ¥600，傍晚光線漂亮。"},
+      {t:"晚餐", h:"⭐ 特選餐廳 · 帝王蟹 / 螃蟹料理", d:"推薦：蟹道樂（道頓堀本店）螃蟹全席 ¥7,920起，或 FUJIYAMA TOKYO 帝王蟹+壽司吃到飽 ¥9,898。必提前預約！", tags:["大阪晚餐特選"]}
+    ],
+    rest:{title:"晚餐選擇", opts:["🦀 蟹道樂 道頓堀本店 — 老字號螃蟹全席，必提前預約","🦀 FUJIYAMA TOKYO 難波 — 帝王蟹+壽司吃到飽，四橋站1分鐘","🥩 板前燒肉一斗 東心齋橋 — A5和牛，主廚現刨"]},
+    tip:"⚠️ 週日人超多！心齋橋和道頓堀人潮洶湧，建議提早出發，晚餐務必提前預約。"
+  },
+  {
+    date:"8/31（一）", title:"大阪 · 梅田 + 生活感體驗", badge:"bo", bl:"大阪",
+    slots:[
+      {t:"上午", h:"天神橋筋商店街 + 大阪生活今昔館", d:"日本最長商店街，完全是在地居民日常生活的地方。今昔館穿著古裝體驗江戶時代大阪街景，很特別。", tags:["在地生活感"]},
+      {t:"下午", h:"梅田 · 百貨血拚", d:"梅田阪急百貨、Grand Front Osaka、LUCUA。必買：堂島蛋糕卷（Mon Cher）、Baton d'Or 餅乾、Grand Calbee。", tags:["購物"]},
+      {t:"傍晚", h:"梅田藍天大廈展望台", d:"大阪夜景首選！¥2,000（大阪周遊卡可免費）。需 15:00 前入場才能免費，傍晚日落+夜景最值得。", tags:["夜間景點"]},
+      {t:"晚餐", h:"⭐ 特選餐廳 · 和牛燒肉", d:"推薦：板前燒肉一斗（A5和牛主廚現刨）、燒肉五苑（A4和牛吃到飽125品）、播重（和牛壽喜燒老字號）。", tags:["大阪晚餐特選"]}
+    ],
+    rest:{title:"晚餐選擇", opts:["🥩 板前燒肉一斗 — A5和牛單點，主廚現切，昭和風","🥩 燒肉五苑 西心齋橋 — 和牛+海鮮吃到飽125品","🍲 播重 道頓堀 — 和牛壽喜燒老字號，6人可包廂"]},
+    tip:"💡 今天行程輕鬆，純粹享受大阪生活步調，逛街、吃喝，不要安排太多景點。"
+  },
+  {
+    date:"9/1（二）", title:"最後採買 → 回台", badge:"bt", bl:"返程",
+    slots:[
+      {t:"上午", h:"心齋橋藥妝最後衝刺", d:"松本清、大國藥妝、唐吉軻德把清單掃完。551蓬萊（豬肉包）必買！記得買冰袋冷藏帶回台灣。", tags:["購物"]},
+      {t:"11:30", h:"⚠️ 前往關西機場", d:"班機 15:10，建議 12:00 前離開難波。搭南海 Rapi:t（難波→關西機場，34分）。提前 3 小時到機場較保險。", tags:["回程"]},
+      {t:"15:10", h:"IT211 KIX → 桃園", d:"回台！機場免稅店還可以最後採購。"}
+    ],
+    tip:"🧳 最後一天建議行李前一晚整理好，早上輕裝掃貨。11:30 一定要出發，不要卡太緊。"
+  }
+];
+
+function renderDays() {
+  const c = document.getElementById('itinerary-days');
+  days.forEach((day, i) => {
+    const slotsHTML = day.slots.map(s => {
+      const tagsHTML = (s.tags||[]).map(t => {
+        const cls = t.includes('必') || t.includes('推薦') ? 'stag stag-hot' : t.includes('吃') || t.includes('餐') ? 'stag stag-food' : t.includes('夜') ? 'stag stag-night' : 'stag stag-def';
+        return `<span class="${cls}">${t}</span>`;
+      }).join('');
+      return `<div class="slot"><div class="slot-time">${s.t}</div><div class="slot-content"><div class="slot-title">${s.h}${tagsHTML}</div><div class="slot-desc">${s.d}</div></div></div>`;
+    }).join('');
+    const restHTML = day.rest ? `<div class="rest-box"><div class="rt">🍽️ ${day.rest.title}</div>${day.rest.opts.map(o=>`<div class="rd">${o}</div>`).join('')}</div>` : '';
+    const tipHTML = day.tip ? `<div class="tip">${day.tip}</div>` : '';
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.innerHTML = `<div class="day-hdr" onclick="toggleDay(${i})"><span class="badge ${day.badge}">${day.bl}</span><span class="day-ttl">${day.title}</span><span class="day-date">${day.date}</span><span class="chv" id="chv-${i}">▼</span></div><div class="day-body" id="db-${i}">${slotsHTML}${restHTML}${tipHTML}</div>`;
+    c.appendChild(card);
+  });
+  toggleDay(0);
+}
+
+function toggleDay(i) {
+  const b = document.getElementById('db-'+i), c = document.getElementById('chv-'+i);
+  const o = b.classList.contains('open');
+  b.classList.toggle('open', !o); c.classList.toggle('open', !o);
+}
+
+// ========== TRANSPORT DATA ==========
+const tData = [
+  {id:'t0', rows:[
+    {f:'桃園機場',t:'關西機場 KIX',d:'—',m:'✈️ IT210 虎航',time:'2h45m',type:'train'},
+    {f:'關西機場',t:'京都車站',d:'77.3 km',m:'JR HARUKA 特急',time:'80 分',type:'train',note:'線上買有6折優惠'},
+    {f:'京都車站',t:'飯店',d:'~1 km',m:'步行 / 計程車',time:'10–15 分',type:'walk'},
+  ]},
+  {id:'t1', rows:[
+    {f:'飯店',t:'伏見稻荷',d:'~2.4 km',m:'JR奈良線 稻荷站',time:'5–10 分',type:'train',note:'直達不換車'},
+    {f:'伏見稻荷',t:'祇園四條',d:'4.1 km',m:'京阪電車',time:'15 分',type:'train'},
+    {f:'祇園',t:'清水寺',d:'1.3 km',m:'步行（清水坂上坡）',time:'12–15 分',type:'walk',note:'有坡度'},
+    {f:'清水寺',t:'八坂神社',d:'1.1 km',m:'步行',time:'5 分',type:'walk'},
+    {f:'八坂神社',t:'鴨川納涼床',d:'1.1 km',m:'步行',time:'10 分',type:'walk'},
+  ]},
+  {id:'t2', rows:[
+    {f:'飯店',t:'嵐山竹林',d:'8.6 km',m:'JR嵯峨野線 嵯峨嵐山站',time:'16 分',type:'train'},
+    {f:'竹林',t:'渡月橋',d:'0.6 km',m:'步行',time:'8 分',type:'walk'},
+    {f:'渡月橋',t:'金閣寺（可選）',d:'5.8 km',m:'計程車（⚠️週六）',time:'20 分',type:'bus',note:'¥1,500–2,000，6人分攤划算'},
+    {f:'金閣寺',t:'京都車站',d:'6.5 km',m:'京都市巴士 101/205號',time:'30 分',type:'bus'},
+  ]},
+  {id:'t3', rows:[
+    {f:'京都河原町',t:'大阪梅田',d:'42.7 km',m:'阪急電鐵（最順路）',time:'40 分',type:'train'},
+    {f:'梅田',t:'難波飯店',d:'4.2 km',m:'地鐵 御堂筋線',time:'12 分',type:'train'},
+  ]},
+  {id:'t4', rows:[
+    {f:'難波',t:'心齋橋',d:'0.8 km',m:'步行',time:'8–10 分',type:'walk'},
+    {f:'心齋橋',t:'道頓堀',d:'0.4 km',m:'步行',time:'5 分',type:'walk'},
+    {f:'道頓堀',t:'黑門市場',d:'0.6 km',m:'步行',time:'8 分',type:'walk'},
+    {f:'難波',t:'大阪城',d:'2.8 km',m:'地鐵 谷町線',time:'15 分',type:'train'},
+    {f:'難波',t:'梅田',d:'4.2 km',m:'地鐵 御堂筋線',time:'12 分',type:'train'},
+    {f:'梅田',t:'天神橋筋商店街',d:'1.5 km',m:'步行',time:'12 分',type:'walk'},
+    {f:'梅田',t:'藍天大廈',d:'0.8 km',m:'步行（穿越地下街）',time:'10 分',type:'walk'},
+  ]},
+  {id:'t5', rows:[
+    {f:'難波',t:'關西機場',d:'34.8 km',m:'南海 Rapi:t 特急（最快）',time:'34 分',type:'train'},
+    {f:'難波',t:'關西機場',d:'34.8 km',m:'利木津巴士（行李多適合）',time:'80–90 分',type:'bus',note:'需提前預約'},
+  ]},
+];
+
+function renderTransport() {
+  tData.forEach(sec => {
+    const el = document.getElementById(sec.id);
+    if (!el) return;
+    sec.rows.forEach(r => {
+      const tagHTML = r.type==='walk' ? '<span class="ttag ttag-walk">步行</span>' : r.type==='bus' ? '<span class="ttag ttag-bus">巴士</span>' : '<span class="ttag ttag-train">電車</span>';
+      const noteHTML = r.note ? `<br><span style="font-size:10px;color:#aaa">${r.note}</span>` : '';
+      const row = document.createElement('table');
+      row.className = 't-table';
+      row.innerHTML = `<tr><td><div class="t-from-to"><span>${r.f}</span><span class="t-arrow">→</span><span>${r.t}</span>${tagHTML}</div></td><td>${r.d}</td><td>${r.m}${noteHTML}</td><td><strong>${r.time}</strong></td></tr>`;
+      el.appendChild(row);
+    });
+  });
+}
+
+// ========== TAB SWITCH ==========
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+renderDays();
+renderTransport();
+</script>
+</body>
+</html>
