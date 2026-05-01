@@ -1,0 +1,91 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans TC', sans-serif; background: #f5f4f0; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
+
+/* NAV TABS */
+.nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #e0ddd5; display: flex; overflow-x: auto; }
+.nav button { flex: none; padding: 12px 18px; border: none; background: none; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.nav button.active { color: #1a1a1a; border-bottom-color: #534AB7; font-weight: 500; }
+.nav button:hover { background: #f5f4f0; }
+
+/* SECTIONS */
+.section { display: none; padding: 16px; max-width: 720px; margin: 0 auto; }
+.section.active { display: block; }
+
+/* HEADER CARD */
+.header-card { background: #534AB7; color: #fff; border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+.header-card h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.header-card p { font-size: 13px; opacity: 0.85; }
+.meta-row { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+.meta-pill { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 12px; }
+
+/* DAY CARDS */
+.day-card { background: #fff; border-radius: 12px; border: 0.5px solid #e0ddd5; margin-bottom: 10px; overflow: hidden; }
+.day-hdr { padding: 12px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+.day-hdr:hover { background: #fafaf8; }
+.badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex: none; }
+.bk { background: #EEEDFE; color: #3C3489; }
+.bo { background: #E6F1FB; color: #0C447C; }
+.bt { background: #EAF3DE; color: #3B6D11; }
+.day-ttl { font-size: 14px; font-weight: 500; flex: 1; }
+.day-date { font-size: 12px; color: #888; }
+.chv { font-size: 11px; color: #aaa; transition: transform 0.2s; flex: none; }
+.chv.open { transform: rotate(180deg); }
+.day-body { padding: 0 16px 14px; display: none; }
+.day-body.open { display: block; }
+
+/* TIMELINE SLOTS */
+.slot { display: grid; grid-template-columns: 64px 1fr; margin: 8px 0; }
+.slot-time { font-size: 11px; font-weight: 600; color: #888; padding-top: 2px; }
+.slot-content { border-left: 2px solid #e0ddd5; padding: 0 0 10px 12px; }
+.slot-title { font-size: 13px; font-weight: 500; }
+.slot-desc { font-size: 12px; color: #666; margin-top: 3px; line-height: 1.5; }
+.stag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 5px; }
+.stag-hot { background: #FAECE7; color: #993C1D; }
+.stag-food { background: #EAF3DE; color: #3B6D11; }
+.stag-night { background: #EEEDFE; color: #3C3489; }
+.stag-def { background: #f0eeea; color: #666; }
+.tip { border-left: 3px solid #7F77DD; padding: 7px 12px; margin-top: 10px; background: #EEEDFE; border-radius: 0 8px 8px 0; font-size: 12px; color: #3C3489; }
+.rest-box { background: #f5f4f0; border-radius: 8px; padding: 10px 14px; margin-top: 10px; }
+.rest-box .rt { font-size: 12px; font-weight: 500; margin-bottom: 5px; }
+.rest-box .rd { font-size: 12px; color: #555; margin-top: 3px; }
+
+/* TRANSPORT TABLE */
+.sec-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: #888; text-transform: uppercase; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 0.5px solid #e0ddd5; }
+.t-table { width: 100%; border-collapse: collapse; }
+.t-table th { font-size: 11px; color: #999; font-weight: 500; text-align: left; padding: 4px 6px; }
+.t-table th:not(:first-child) { text-align: right; }
+.t-table td { padding: 8px 6px; border-bottom: 0.5px solid #f0eeea; vertical-align: middle; font-size: 12px; }
+.t-table tr:last-child td { border-bottom: none; }
+.t-table td:not(:first-child) { text-align: right; color: #444; }
+.t-table td:first-child { color: #1a1a1a; }
+.t-from-to { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.t-arrow { color: #ccc; font-size: 10px; }
+.ttag { display: inline-block; font-size: 10px; padding: 1px 5px; border-radius: 6px; margin-left: 4px; }
+.ttag-walk { background: #EAF3DE; color: #3B6D11; }
+.ttag-train { background: #E6F1FB; color: #0C447C; }
+.ttag-bus { background: #FAEEDA; color: #633806; }
+.t-total { display: flex; justify-content: space-between; padding: 8px 6px; border-top: 1px solid #e0ddd5; margin-top: 4px; font-size: 12px; }
+.t-total span:first-child { color: #888; }
+.t-total span:last-child { font-weight: 500; }
+.tip-box { border-left: 3px solid #7F77DD; padding: 8px 12px; margin: 12px 0; background: #EEEDFE; border-radius: 0 8px 8px 0; font-size: 12px; color: #3C3489; line-height: 1.6; }
+
+/* HOTEL / RESTAURANT CARDS */
+.card-grid { display: grid; gap: 10px; }
+.info-card { background: #fff; border-radius: 12px; border: 0.5px solid #e0ddd5; padding: 14px 16px; }
+.card-rank { display: inline-block; background: #534AB7; color: #fff; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 8px; margin-bottom: 8px; }
+.card-rank.r2 { background: #5DCAA5; }
+.card-rank.r3 { background: #D85A30; }
+.card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.card-sub { font-size: 12px; color: #888; margin-bottom: 8px; }
+.card-body { font-size: 12px; color: #444; line-height: 1.6; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.ctag { font-size: 11px; padding: 2px 8px; border-radius: 8px; background: #f0eeea; color: #555; }
+.ctag-green { background: #EAF3DE; color: #3B6D11; }
+.ctag-blue { background: #E6F1FB; color: #0C447C; }
+.ctag-purple { background: #EEEDFE; color: #3C3489; }
+.ctag-amber { background: #FAEEDA; color: #633806; }
+.price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #f0eeea; }
+.price-label { font-size: 11px; color: #888; }
+.price-val { font-size: 13px; font-weight: 600; color: #534AB7; }
+.divider { height: 1px; background: #f0eeea; margin: 16px 0; }
+.sub-section-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #534AB7; }
