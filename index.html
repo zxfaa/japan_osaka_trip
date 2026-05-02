@@ -6,17 +6,51 @@
 <title>大阪・京都 2026 旅遊完整攻略</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans TC', sans-serif; background: #f5f4f0; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
+  body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans TC', sans-serif; background: #f5f4f0; color: #1a1a1a; font-size: 14px; line-height: 1.6; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
 
-  /* NAV TABS */
-  .nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #e0ddd5; display: flex; overflow-x: auto; }
-  .nav button { flex: none; padding: 12px 18px; border: none; background: none; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
-  .nav button.active { color: #1a1a1a; border-bottom-color: #534AB7; font-weight: 500; }
-  .nav button:hover { background: #f5f4f0; }
+  /* BOTTOM NAV */
+  .nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: #fff; border-top: 0.5px solid #e0ddd5; display: flex; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
+  .nav button { flex: 1; padding: 10px 4px 8px; border: none; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: all 0.15s; -webkit-tap-highlight-color: transparent; min-height: 56px; color: #999; }
+  .nav button .nav-icon { font-size: 22px; line-height: 1; }
+  .nav button .nav-label { font-size: 10px; letter-spacing: 0.02em; }
+  .nav button.active { color: #534AB7; }
+  .nav button.active .nav-icon { transform: scale(1.08); }
 
   /* SECTIONS */
   .section { display: none; padding: 16px; max-width: 720px; margin: 0 auto; }
   .section.active { display: block; }
+
+  /* RWD — iPhone (375–390px) */
+  @media (max-width: 430px) {
+    body { font-size: 15px; }
+    .section { padding: 12px; }
+    .header-card h1 { font-size: 18px; }
+    .header-card { padding: 14px; }
+    .meta-pill { font-size: 11px; }
+    .day-hdr { padding: 12px; gap: 8px; }
+    .day-ttl { font-size: 13px; }
+    .day-date { display: none; }
+    .day-body { padding: 0 12px 12px; }
+    .slot { grid-template-columns: 52px 1fr; }
+    .slot-title { font-size: 13px; }
+    .slot-desc { font-size: 12px; }
+    .card-name { font-size: 14px; }
+    .card-body { font-size: 12px; }
+    .sub-section-title { font-size: 13px; }
+    .t-table { display: none; }
+    .t-total { font-size: 12px; }
+    .t-card { display: block; }
+  }
+
+  /* 交通卡片式（手機用） */
+  .t-card { display: none; background: #fff; border-radius: 10px; border: 0.5px solid #e0ddd5; padding: 10px 12px; margin-bottom: 6px; }
+  .t-card-route { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .t-card-row { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+  .t-card-method { font-size: 12px; color: #555; flex: 1; }
+  .t-card-right { display: flex; gap: 8px; align-items: center; }
+  .t-card-dist { font-size: 11px; color: #bbb; }
+  .t-card-time { font-size: 13px; font-weight: 600; color: #534AB7; }
+  .t-card-note { font-size: 11px; color: #aaa; margin-top: 3px; }
 
   /* HEADER CARD */
   .header-card { background: #534AB7; color: #fff; border-radius: 12px; padding: 18px; margin-bottom: 16px; }
@@ -103,10 +137,22 @@
 <body>
 
 <nav class="nav">
-  <button class="active" onclick="showTab('itinerary', this)">📅 行程</button>
-  <button onclick="showTab('transport', this)">🚃 交通</button>
-  <button onclick="showTab('hotels', this)">🏨 住宿</button>
-  <button onclick="showTab('food', this)">🍜 餐廳</button>
+  <button class="active" onclick="showTab('itinerary', this)">
+    <span class="nav-icon">📅</span>
+    <span class="nav-label">行程</span>
+  </button>
+  <button onclick="showTab('transport', this)">
+    <span class="nav-icon">🚃</span>
+    <span class="nav-label">交通</span>
+  </button>
+  <button onclick="showTab('hotels', this)">
+    <span class="nav-icon">🏨</span>
+    <span class="nav-label">住宿</span>
+  </button>
+  <button onclick="showTab('food', this)">
+    <span class="nav-icon">🍜</span>
+    <span class="nav-label">餐廳</span>
+  </button>
 </nav>
 
 <!-- ========== TAB 1: 行程 ========== -->
@@ -642,10 +688,28 @@ function renderTransport() {
     sec.rows.forEach(r => {
       const tagHTML = r.type==='walk' ? '<span class="ttag ttag-walk">步行</span>' : r.type==='bus' ? '<span class="ttag ttag-bus">巴士</span>' : '<span class="ttag ttag-train">電車</span>';
       const noteHTML = r.note ? `<br><span style="font-size:10px;color:#aaa">${r.note}</span>` : '';
+      // 桌機 table row
       const row = document.createElement('table');
       row.className = 't-table';
       row.innerHTML = `<tr><td><div class="t-from-to"><span>${r.f}</span><span class="t-arrow">→</span><span>${r.t}</span>${tagHTML}</div></td><td>${r.d}</td><td>${r.m}${noteHTML}</td><td><strong>${r.time}</strong></td></tr>`;
       el.appendChild(row);
+      // 手機卡片
+      const card = document.createElement('div');
+      card.className = 't-card';
+      card.innerHTML = `
+        <div class="t-card-route">
+          <span>${r.f}</span><span style="color:#ccc;font-size:11px">→</span><span>${r.t}</span>${tagHTML}
+        </div>
+        <div class="t-card-row">
+          <div class="t-card-method">${r.m}</div>
+          <div class="t-card-right">
+            <span class="t-card-dist">${r.d}</span>
+            <span class="t-card-time">${r.time}</span>
+          </div>
+        </div>
+        ${r.note ? `<div class="t-card-note">${r.note}</div>` : ''}
+      `;
+      el.appendChild(card);
     });
   });
 }
